@@ -53,7 +53,8 @@ class ROM {
   ROM& operator=(ROM rom) noexcept;
 
  public:
-  inline std::vector<uint8_t> prg_rom() const { return prg_rom_; }
+  inline const std::vector<uint8_t>& prg_rom() const { return prg_rom_; }
+  inline const std::vector<uint8_t>& chr_rom() const { return chr_rom_; }
 
  public:
   void Open(const std::string& rom_path);
