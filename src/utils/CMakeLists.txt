@@ -4,4 +4,4 @@ project(utils)
 
 add_library(utils disassembler6502.cc)
 
-target_link_libraries(utils)
+target_link_libraries(utils rom)

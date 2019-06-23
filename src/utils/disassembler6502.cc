@@ -4,33 +4,43 @@
 #include <iomanip>
 #include <sstream>
 
+#include "nes/rom/rom.hh"
 #include "utils/address.hh"
 
-utils::Disassembler6502::Disassembler6502(const ROM& rom) { Open(rom); }
-utils::Disassembler6502::Disassembler6502(ROM&& rom) { Open(std::move(rom)); }
+utils::Disassembler6502::Disassembler6502(const nes::rom::ROM& rom) {
+  Open(rom);
+}
+utils::Disassembler6502::Disassembler6502(nes::rom::ROM&& rom) {
+  Open(std::move(rom));
+}
+utils::Disassembler6502::Disassembler6502(const std::string& path_to_rom) {
+  Open(path_to_rom);
+}
 utils::Disassembler6502::Disassembler6502(const Disassembler6502& disassembler)
     : rom_(disassembler.rom_) {
-  pc_ = rom_.begin() + disassembler.get_pc();
+  pc_ = rom_.prg_rom().begin() + disassembler.get_pc();
   disassembly_ << disassembler.disassembly_.rdbuf();
 }
 utils::Disassembler6502::Disassembler6502(
     Disassembler6502&& disassembler) noexcept
     : disassembly_(std::move(disassembler.disassembly_)) {
-  pc_ = disassembler.rom_.begin() + disassembler.get_pc();
+  pc_ = disassembler.rom_.prg_rom().begin() + disassembler.get_pc();
   std::move(disassembler.pc_);
   rom_ = std::move(disassembler.rom_);
 }
 
-void utils::Disassembler6502::Open(const ROM& rom) {
+void utils::Disassembler6502::Open(const nes::rom::ROM& rom) {
   rom_ = rom;
-  pc_ = rom_.begin();
+  pc_ = rom_.prg_rom().begin();
   disassembly_.clear();
 }
-
-void utils::Disassembler6502::Open(ROM&& rom) {
+void utils::Disassembler6502::Open(nes::rom::ROM&& rom) {
   rom_ = std::move(rom);
-  pc_ = rom_.begin();
+  pc_ = rom_.prg_rom().begin();
   disassembly_.clear();
+}
+void utils::Disassembler6502::Open(const std::string& path_to_rom) {
+  Open(nes::rom::ROM{path_to_rom});
 }
 
 void utils::Disassembler6502::operator()() {
@@ -38,7 +48,7 @@ void utils::Disassembler6502::operator()() {
     return;
   }
 
-  if (pc_ == rom_.begin()) {
+  if (pc_ == rom_.prg_rom().begin()) {
     disassembly_ << std::setfill(' ') << std::setw(22) << "* = 0000"
                  << std::endl;
   }
