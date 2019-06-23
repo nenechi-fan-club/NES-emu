@@ -42,13 +42,13 @@ void nes::rom::ROM::ParseHeader(const std::vector<uint8_t>& header) {
   header_.prg_ram = utils::get_bit(flag6, 1);
   header_.trainer = utils::get_bit(flag6, 2);
   header_.ignore_mirror = utils::get_bit(flag6, 3);
-  header_.mapper = utils::get_range(flag6, 4, 4);
+  header_.mapper = utils::get_range(flag6, 4, 4) << 4;
 
   auto flag7 = header[7];
   header_.vs_unisys = utils::get_bit(flag7, 0);
   header_.playchoice10 = utils::get_bit(flag7, 1);
   header_.ines2 = utils::get_range(flag7, 2, 2) == 2;
-  header_.mapper |= utils::get_range(flag7, 4, 4) << 4;
+  header_.mapper |= utils::get_range(flag7, 4, 4);
 
   auto flag9 = header[9];
   header_.tv_sys = utils::get_bit(flag9, 0);
