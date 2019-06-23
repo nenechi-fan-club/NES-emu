@@ -8,6 +8,21 @@
 
 nes::rom::ROM::ROM(const std::string& rom_path) { Open(rom_path); }
 
+nes::rom::ROM& nes::rom::ROM::operator=(nes::rom::ROM rom) noexcept {
+  if (this == &rom) {
+    return *this;
+  }
+
+  using std::swap;
+
+  swap(header_, rom.header_);
+  swap(trainer_, rom.trainer_);
+  swap(prg_rom_, rom.prg_rom_);
+  swap(chr_rom_, rom.chr_rom_);
+
+  return *this;
+}
+
 void nes::rom::ROM::Open(const std::string& rom_path) {
   auto ifs = std::ifstream(rom_path, std::ios::binary);
 

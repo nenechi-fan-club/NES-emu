@@ -50,6 +50,8 @@ class ROM {
   ROM(const ROM& rom) = default;
   ROM(ROM&& rom) = default;
 
+  ROM& operator=(ROM rom) noexcept;
+
  public:
   inline std::vector<uint8_t> prg_rom() const { return prg_rom_; }
 
