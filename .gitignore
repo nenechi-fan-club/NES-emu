@@ -45,3 +45,5 @@ _dep
 
 
 .vscode/*
+resources/*
+build/*
