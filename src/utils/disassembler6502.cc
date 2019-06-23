@@ -53,6 +53,8 @@ void utils::Disassembler6502::operator()() {
       [op_code](const Instruction& a) { return a.op_code == op_code; });
 
   if (it == instructionSet.end()) {
+    // skip NOP when parsing ROMs
+    ++pc_;
     return;
   }
 
