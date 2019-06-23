@@ -2,7 +2,6 @@
 
 #include <cstdint>
 #include <fstream>
-#include <iostream>
 
 #include "utils/bit.hh"
 
@@ -28,10 +27,6 @@ void nes::rom::ROM::Open(const std::string& rom_path) {
 
   auto header = std::vector<uint8_t>(headerSize);
   ifs.read(reinterpret_cast<char*>(&header[0]), header.size());
-
-  for (auto byte : header) {
-    std::cout << std::hex << (int)byte << std::endl;
-  }
 
   ParseHeader(header);
 
