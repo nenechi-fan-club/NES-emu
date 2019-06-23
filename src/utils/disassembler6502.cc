@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <sstream>
 
+#include "nes/cpu/instructions.hh"
 #include "nes/rom/rom.hh"
 #include "utils/address.hh"
 
@@ -58,11 +59,13 @@ void utils::Disassembler6502::operator()() {
   std::stringstream machine;
   std::stringstream assembly;
 
-  auto it = std::find_if(
-      instructionSet.begin(), instructionSet.end(),
-      [op_code](const Instruction& a) { return a.op_code == op_code; });
+  auto it = std::find_if(nes::cpu::instructionSet.begin(),
+                         nes::cpu::instructionSet.end(),
+                         [op_code](const nes::cpu::Instruction& a) {
+                           return a.op_code == op_code;
+                         });
 
-  if (it == instructionSet.end()) {
+  if (it == nes::cpu::instructionSet.end()) {
     // skip NOP when parsing ROMs
     ++pc_;
     return;
@@ -73,77 +76,77 @@ void utils::Disassembler6502::operator()() {
   line << std::setfill('0') << std::setw(4) << std::hex << get_pc() << " ";
 
   switch (instruction.addressing) {
-    case AddressMode::ACCUMULATOR:
+    case nes::cpu::AddressMode::ACCUMULATOR:
       machine << std::hex << (int)*pc_;
       assembly << instruction.mnemonic << " A";
       ++pc_;
       break;
-    case AddressMode::ABSOLUTE:
+    case nes::cpu::AddressMode::ABSOLUTE:
       machine << std::hex << (int)*pc_ << " " << (int)*(pc_ + 1) << " "
               << (int)*(pc_ + 2);
       assembly << instruction.mnemonic << " $" << std::hex
                << LittleEndian(*(pc_ + 1), *(pc_ + 2));
       pc_ += 3;
       break;
-    case AddressMode::ABSOLUTE_X:
+    case nes::cpu::AddressMode::ABSOLUTE_X:
       machine << std::hex << (int)*pc_ << " " << (int)*(pc_ + 1) << " "
               << (int)*(pc_ + 2);
       assembly << instruction.mnemonic << " $" << std::hex
                << LittleEndian(*(pc_ + 1), *(pc_ + 2)) << ",X";
       pc_ += 3;
       break;
-    case AddressMode::ABSOLUTE_Y:
+    case nes::cpu::AddressMode::ABSOLUTE_Y:
       machine << std::hex << (int)*pc_ << " " << (int)*(pc_ + 1) << " "
               << (int)*(pc_ + 2);
       assembly << instruction.mnemonic << " $" << std::hex
                << LittleEndian(*(pc_ + 1), *(pc_ + 2)) << ",Y";
       pc_ += 3;
       break;
-    case AddressMode::IMMEDIATE:
+    case nes::cpu::AddressMode::IMMEDIATE:
       machine << std::hex << (int)*pc_ << " " << (int)*(pc_ + 1);
       assembly << instruction.mnemonic << " #$" << std::hex << (int)*(pc_ + 1);
       pc_ += 2;
       break;
-    case AddressMode::IMPLIED:
+    case nes::cpu::AddressMode::IMPLIED:
       machine << std::hex << (int)*pc_;
       assembly << instruction.mnemonic;
       ++pc_;
       break;
-    case AddressMode::INDIRECT:
+    case nes::cpu::AddressMode::INDIRECT:
       machine << std::hex << (int)*pc_ << " " << (int)*(pc_ + 1);
       assembly << instruction.mnemonic << " ($" << std::hex << (int)*(pc_ + 1)
                << ")";
       pc_ += 3;
       break;
-    case AddressMode::INDIRECT_X:
+    case nes::cpu::AddressMode::INDIRECT_X:
       machine << std::hex << (int)*pc_ << " " << (int)*(pc_ + 1);
       assembly << instruction.mnemonic << " ($" << std::hex << (int)*(pc_ + 1)
                << ",X)";
       pc_ += 2;
       break;
-    case AddressMode::INDIRECT_Y:
+    case nes::cpu::AddressMode::INDIRECT_Y:
       machine << std::hex << (int)*pc_ << " " << (int)*(pc_ + 1);
       assembly << instruction.mnemonic << " ($" << std::hex << (int)*(pc_ + 1)
                << ",Y)";
       pc_ += 2;
       break;
-    case AddressMode::RELATIVE:
+    case nes::cpu::AddressMode::RELATIVE:
       machine << std::hex << (int)*pc_ << " " << (int)*(pc_ + 1);
       assembly << instruction.mnemonic << " $" << std::hex << (int)*(pc_ + 1);
       pc_ += 2;
       break;
-    case AddressMode::ZEROPAGE:
+    case nes::cpu::AddressMode::ZEROPAGE:
       machine << std::hex << (int)*pc_ << " " << (int)*(pc_ + 1);
       assembly << instruction.mnemonic << " $" << std::hex << (int)*(pc_ + 1);
       pc_ += 2;
       break;
-    case AddressMode::ZEROPAGE_X:
+    case nes::cpu::AddressMode::ZEROPAGE_X:
       machine << std::hex << (int)*pc_ << " " << (int)*(pc_ + 1);
       assembly << instruction.mnemonic << " $" << std::hex << (int)*(pc_ + 1)
                << ",X";
       pc_ += 2;
       break;
-    case AddressMode::ZEROPAGE_Y:
+    case nes::cpu::AddressMode::ZEROPAGE_Y:
       machine << std::hex << (int)*pc_ << " " << (int)*(pc_ + 1);
       assembly << instruction.mnemonic << " $" << std::hex << (int)*(pc_ + 1)
                << ",Y";
