@@ -1,12 +1,12 @@
-#include "utils/disassembler6502.hh"
+#include "utils/disassembler6502.hpp"
 
 #include <algorithm>
 #include <iomanip>
 #include <sstream>
 
-#include "nes/cpu/instructions.hh"
-#include "nes/rom/rom.hh"
-#include "utils/address.hh"
+#include "nes/cpu/instructions.hpp"
+#include "nes/rom/rom.hpp"
+#include "utils/address.hpp"
 
 utils::Disassembler6502::Disassembler6502(const nes::rom::ROM& rom) {
   Open(rom);

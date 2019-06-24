@@ -1,9 +1,9 @@
-#include "nes/rom/rom.hh"
+#include "nes/rom/rom.hpp"
 
 #include <cstdint>
 #include <fstream>
 
-#include "utils/bit.hh"
+#include "utils/bit.hpp"
 
 nes::rom::ROM::ROM(const std::string& rom_path) { Open(rom_path); }
 

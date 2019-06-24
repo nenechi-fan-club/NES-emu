@@ -1,8 +1,8 @@
 #include <fstream>
 #include <iostream>
 
-#include "nes/rom/rom.hh"
-#include "utils/disassembler6502.hh"
+#include "nes/rom/rom.hpp"
+#include "utils/disassembler6502.hpp"
 
 int main(int argc, char** argv) {
   if (argc < 2) {

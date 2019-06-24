@@ -5,8 +5,8 @@
 #include <sstream>
 #include <vector>
 
-#include "nes/rom/rom.hh"
-#include "utils/address.hh"
+#include "nes/rom/rom.hpp"
+#include "utils/address.hpp"
 
 namespace utils {
 
